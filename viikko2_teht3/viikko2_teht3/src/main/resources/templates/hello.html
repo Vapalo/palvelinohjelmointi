@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<h1>Lisää uusi kaveri</h1>
+	
+	<form action="#" th:action="@{hello}" th:object="${friend}" method="post" autocomplete="off">
+	
+	<p>Name: <input type="text" th:field="*{nimi}" /></p>
+	<p><input type="submit"  value="Lisää"/></p>
+	
+	</form>
+	
+	<table>
+	
+		<tr th:each="list: ${friends}">
+			<td th:text="${list.nimi}"></td>
+		</tr>
+		
+	
+	</table>
+
+</body>
+</html>
