@@ -12,8 +12,9 @@
 			th:text="'Welcome ' + ${name} + '!'">OK ika</div>
 		
 		
-		<div th:if="${age} &lt; 18"
-			th:text="You are too young!">eiOK</div>
+		<span th:if="${age} &lt 18">You are too young<span 
+			th:text="', ' + ${name} + '!">liian nuori</span>
+		</span>
 	</body>
 	
 
