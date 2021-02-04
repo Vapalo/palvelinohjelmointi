@@ -65,4 +65,11 @@ public class BookController {
 		
 		return "edit";
 	}
+	
+	@PostMapping("/update")
+		public String update(Model model, @ModelAttribute("book") Book book) {
+		
+		repository.save(book);
+		return "redirect:/booklist";
+	}
 }
