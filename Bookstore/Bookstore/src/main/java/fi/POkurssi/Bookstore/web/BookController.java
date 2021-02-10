@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import fi.POkurssi.Bookstore.domain.Book;
 import fi.POkurssi.Bookstore.domain.BookRepository;
+import fi.POkurssi.Bookstore.domain.CategoryRepository;
 
 @Controller
 public class BookController {
@@ -24,13 +25,18 @@ public class BookController {
 	}
 	
 	@Autowired
-	private BookRepository repository;
+	private BookRepository brepository;
+	
+	@Autowired
+	private CategoryRepository crepository;
 	
 	@RequestMapping("/booklist")
 		public String kirjalista(Model model) {
 		
 			
-		model.addAttribute("books", repository.findAll());
+		model.addAttribute("books", brepository.findAll());
+		model.addAttribute("categories", crepository.findAll());
+		
 		
 		return "booklist";
 	}
@@ -38,13 +44,15 @@ public class BookController {
 	@RequestMapping("/add")
 		public String add(Model model) {
 		model.addAttribute("book", new Book());
+		model.addAttribute("categories", crepository.findAll());
 		
 		return "add";
 	}
 	
 	@PostMapping("/save")
 		public String savebook(@ModelAttribute("book") Book book, Model model) {
-		repository.save(book);
+		
+		brepository.save(book);
 		
 		return "redirect:booklist";
 	}
@@ -52,7 +60,8 @@ public class BookController {
 	@GetMapping("/delete/{id}")
 		public String poista(@PathVariable("id") Long id, Model model) {
 		
-		repository.deleteById(id);
+		
+		brepository.deleteById(id);
 		
 		return "redirect:/booklist";
 		
@@ -61,7 +70,8 @@ public class BookController {
 	@GetMapping("/edit/{id}")
 		public String muuta(@PathVariable("id") Long id, Model model) {
 		
-		model.addAttribute("book", repository.findById(id));
+		model.addAttribute("book", brepository.findById(id));
+		model.addAttribute("categories", crepository.findAll());
 		
 		return "edit";
 	}
@@ -69,7 +79,7 @@ public class BookController {
 	@PostMapping("/update")
 		public String update(Model model, @ModelAttribute("book") Book book) {
 		
-		repository.save(book);
+		brepository.save(book);
 		return "redirect:/booklist";
 	}
 }
