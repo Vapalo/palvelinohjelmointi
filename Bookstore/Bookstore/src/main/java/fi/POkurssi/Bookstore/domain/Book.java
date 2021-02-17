@@ -23,6 +23,7 @@ public class Book {
 	
 	@ManyToOne
 	@JoinColumn(name="categoryid")
+	
 	private Category category;
 
 	public Book(String title, String author, int year, int isbn, Double price, Category category) {
