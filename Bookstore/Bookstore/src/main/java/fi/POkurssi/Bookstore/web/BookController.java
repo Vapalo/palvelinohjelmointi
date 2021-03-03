@@ -3,6 +3,7 @@ package fi.POkurssi.Bookstore.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,22 +20,31 @@ import fi.POkurssi.Bookstore.domain.Book;
 import fi.POkurssi.Bookstore.domain.BookRepository;
 import fi.POkurssi.Bookstore.domain.Category;
 import fi.POkurssi.Bookstore.domain.CategoryRepository;
+import fi.POkurssi.Bookstore.domain.UserRepository;
 
 @Controller
 public class BookController {
 	
 	
-	@GetMapping("/index")
+	@GetMapping("/home")
 		public String indexPage() {
 		
-		return "index";
+		return "home";
 	}
+	@GetMapping("/")
+	public String Page() {
+	
+	return "home";
+}
 	
 	@Autowired
 	private BookRepository brepository;
 	
 	@Autowired
 	private CategoryRepository crepository;
+	
+	@Autowired
+	private UserRepository urepository;
 	
 	@RequestMapping("/booklist")
 		public String kirjalista(Model model) {
@@ -44,6 +54,17 @@ public class BookController {
 		model.addAttribute("categories", crepository.findAll());
 		return "booklist";
 	}
+	
+	@RequestMapping(value="/login")
+	public String loginsivu() {
+		return "login";
+	}
+	
+	@GetMapping("/logout")
+	public String logout() {
+		return "home";
+	}
+	
 	
 	@RequestMapping(value="/books", method=RequestMethod.GET)
 	public @ResponseBody List<Book> bookListRest() {
@@ -73,8 +94,8 @@ public class BookController {
 	}
 	
 	@GetMapping("/delete/{id}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 		public String poista(@PathVariable("id") Long id, Model model) {
-		
 		
 		brepository.deleteById(id);
 		
